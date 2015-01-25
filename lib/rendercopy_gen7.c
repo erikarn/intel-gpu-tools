@@ -42,7 +42,7 @@ static uint32_t
 batch_align(struct intel_batchbuffer *batch, uint32_t align)
 {
 	uint32_t offset = batch_used(batch);
-	offset = ALIGN(offset, align);
+	offset = XALIGN(offset, align);
 	batch->state = batch->buffer + offset;
 	return offset;
 }
@@ -578,7 +578,7 @@ void gen7_render_copyfunc(struct intel_batchbuffer *batch,
 	OUT_BATCH(MI_BATCH_BUFFER_END);
 
 	batch_end = batch->ptr - batch->buffer;
-	batch_end = ALIGN(batch_end, 8);
+	batch_end = XALIGN(batch_end, 8);
 	igt_assert(batch_end < BATCH_STATE_SPLIT);
 
 	gen7_render_flush(batch, context, batch_end);

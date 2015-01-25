@@ -1117,7 +1117,7 @@ static void test_unmap(int fd, int expected)
 				MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
 	igt_assert(ptr != MAP_FAILED);
 
-	bo_ptr = (char *)ALIGN((unsigned long)ptr, PAGE_SIZE);
+	bo_ptr = (char *)XALIGN((unsigned long)ptr, PAGE_SIZE);
 
 	for (i = 0; i < num_obj; i++, bo_ptr += sizeof(linear)) {
 		ret = gem_userptr(fd, bo_ptr, sizeof(linear), 0, &bo[i]);
@@ -1152,7 +1152,7 @@ static void test_unmap_after_close(int fd)
 				MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
 	igt_assert(ptr != MAP_FAILED);
 
-	bo_ptr = (char *)ALIGN((unsigned long)ptr, PAGE_SIZE);
+	bo_ptr = (char *)XALIGN((unsigned long)ptr, PAGE_SIZE);
 
 	for (i = 0; i < num_obj; i++, bo_ptr += sizeof(linear)) {
 		ret = gem_userptr(fd, bo_ptr, sizeof(linear), 0, &bo[i]);

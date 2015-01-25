@@ -140,7 +140,7 @@ static uint32_t
 batch_align(struct intel_batchbuffer *batch, uint32_t align)
 {
 	uint32_t offset = batch_used(batch);
-	offset = ALIGN(offset, align);
+	offset = XALIGN(offset, align);
 	batch->ptr = batch->buffer + offset;
 	return offset;
 }

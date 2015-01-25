@@ -389,7 +389,7 @@ static void test_single(int fd)
 			MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
 	assert(ptr != MAP_FAILED);
 
-	bo_ptr = (char *)ALIGN((unsigned long)ptr, PAGE_SIZE);
+	bo_ptr = (char *)XALIGN((unsigned long)ptr, PAGE_SIZE);
 
 	start_test(test_duration_sec);
 
@@ -422,7 +422,7 @@ static void test_multiple(int fd, unsigned int batch, int random)
 			MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
 	assert(ptr != MAP_FAILED);
 
-	bo_ptr = (char *)ALIGN((unsigned long)ptr, PAGE_SIZE);
+	bo_ptr = (char *)XALIGN((unsigned long)ptr, PAGE_SIZE);
 
 	for (i = 0; i < batch; i++)
 		map[i] = i;

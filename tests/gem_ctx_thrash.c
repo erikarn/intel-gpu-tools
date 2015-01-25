@@ -170,8 +170,8 @@ processes(void)
 
 	/* tweak rlimits to allow us to create this many files */
 	igt_assert(getrlimit(RLIMIT_NOFILE, &rlim) == 0);
-	if (rlim.rlim_cur < ALIGN(num_ctx + 1024, 1024)) {
-		rlim.rlim_cur = ALIGN(num_ctx + 1024, 1024);
+	if (rlim.rlim_cur < XALIGN(num_ctx + 1024, 1024)) {
+		rlim.rlim_cur = XALIGN(num_ctx + 1024, 1024);
 		if (rlim.rlim_cur > rlim.rlim_max)
 			rlim.rlim_max = rlim.rlim_cur;
 		igt_assert(setrlimit(RLIMIT_NOFILE, &rlim) == 0);

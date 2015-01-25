@@ -176,7 +176,7 @@ static void exec_split_batch(int fd, uint32_t *cmds,
 	 */
 	execbuf.batch_start_offset = actual_start_offset & ~0x7;
 	execbuf.batch_len =
-		ALIGN(size + actual_start_offset - execbuf.batch_start_offset,
+		XALIGN(size + actual_start_offset - execbuf.batch_start_offset,
 		      0x8);
 	execbuf.cliprects_ptr = 0;
 	execbuf.num_cliprects = 0;

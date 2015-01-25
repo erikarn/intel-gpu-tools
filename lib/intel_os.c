@@ -223,7 +223,7 @@ void intel_require_memory(uint32_t count, uint32_t size, unsigned mode)
 
 	required = count;
 	required *= size + KERNEL_BO_OVERHEAD;
-	required = ALIGN(required, 4096);
+	required = XALIGN(required, 4096);
 
 	igt_debug("Checking %u surfaces of size %u bytes (total %llu) against %s%s\n",
 		  count, size, (long long)required,
