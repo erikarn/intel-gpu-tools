@@ -85,7 +85,7 @@ static igt_debugfs_t *__igt_debugfs_singleton(void)
  */
 int igt_debugfs_open(const char *filename, int mode)
 {
-
+	fprintf(stderr, "%s: %s: not yet implemented\n", __func__, filename);
 	return -1;
 }
 
@@ -104,6 +104,7 @@ FILE *igt_debugfs_fopen(const char *filename,
 			const char *mode)
 {
 
+	fprintf(stderr, "%s: %s: not yet implemented\n", __func__, filename);
 	return NULL;
 }
 
