@@ -1295,6 +1295,9 @@ static void fatal_sig_handler(int sig)
 		pid_t tid = syscall(SYS_gettid);
 
 		syscall(SYS_tgkill, pid, tid, sig);
+#elif defined(__FreeBSD__)
+		pthread_t tid = pthread_self();
+		pthread_kill(tid, sig);
 #else
 		pthread_t tid = pthread_self();
 		union sigval value = { .sival_ptr = NULL };
