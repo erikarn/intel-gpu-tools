@@ -119,7 +119,12 @@ static void wait_freq_settle(void)
 	/* FIXME: Lazy sleep without check. */
 	ts.tv_sec = 0;
 	ts.tv_nsec = 20000;
+#ifdef	__FreeBSD__
+	/* XXX not exactly correct */
+	nanosleep(&ts, NULL);
+#else
 	clock_nanosleep(CLOCK_MONOTONIC, 0, &ts, NULL);
+#endif
 }
 
 static void set_frequency(struct freq_info *freq_info, int val)
