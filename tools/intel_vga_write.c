@@ -30,7 +30,9 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <unistd.h>
+#ifdef	__linux__
 #include <sys/io.h>
+#endif
 #include "intel_io.h"
 #include "intel_chipset.h"
 
@@ -38,8 +40,10 @@ static void write_reg(uint32_t reg, uint8_t val, bool use_mmio)
 {
 	if (use_mmio)
 		*((volatile uint8_t *)mmio + reg) = val;
+#ifdef	__linux__
 	else
 		outb(val, reg);
+#endif
 }
 
 static void usage(const char *cmdname)
@@ -79,15 +83,24 @@ int main(int argc, char *argv[])
 
 	if (use_mmio)
 		intel_register_access_init(intel_get_pci_device(), 0);
+#ifdef	__linux__
 	else
 		assert(iopl(3) == 0);
+#else
+	else {
+		fprintf(stderr, "%s: non-mmio is not supported on this OS.\n", argv[0]);
+		exit(127);
+	}
+#endif
 
 	write_reg(reg, val, use_mmio);
 
 	if (use_mmio)
 		intel_register_access_fini();
+#ifdef	__linux__
 	else
 		iopl(0);
+#endif
 
 	return ret;
 }
