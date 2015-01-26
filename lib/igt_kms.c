@@ -301,6 +301,7 @@ int kmstest_get_pipe_from_crtc_id(int fd, int crtc_id)
 
 static signed long set_vt_mode(unsigned long mode)
 {
+#ifdef	__linux__
 	int fd;
 	unsigned long prev_mode;
 
@@ -319,8 +320,10 @@ static signed long set_vt_mode(unsigned long mode)
 	return prev_mode;
 err:
 	close(fd);
-
 	return -errno;
+#else
+	return -ENOENT;
+#endif
 }
 
 static unsigned long orig_vt_mode = -1UL;
@@ -355,18 +358,28 @@ void kmstest_restore_vt_mode(void)
  */
 void kmstest_set_vt_graphics_mode(void)
 {
+#ifdef __linux__
 	long ret;
 
 	igt_install_exit_handler((igt_exit_handler_t) kmstest_restore_vt_mode);
 
 	igt_disable_exit_handler();
+	/*
+	 * KD_GRAPHICS is a Linux tty layer construct; so for now
+	 * just wrap it appropriately.
+	 *
+	 * It'll need updating for BSD.
+	 */
 	ret = set_vt_mode(KD_GRAPHICS);
 	igt_enable_exit_handler();
-
 	igt_assert(ret >= 0);
 	orig_vt_mode = ret;
 
 	igt_debug("VT: graphics mode set\n");
+#else
+	orig_vt_mode = -1;
+	igt_debug("VT: TODO: implement graphics mode restore\n");
+#endif
 }
 
 
