@@ -209,6 +209,14 @@ for file in $files; do
 done
 AC_SUBST(QUICK_DUMP_EXTRA_DIST)
 
+AM_CONDITIONAL([IS_FREEBSD],false)
+case $host in
+	*freebsd*)
+		AC_DEFINE([IS_FREEBSD], [1], [FreeBSD host])
+		AM_CONDITIONAL([IS_FREEBSD],true)
+		;;
+esac
+
 AC_CONFIG_FILES([
 		 Makefile
 		 benchmarks/Makefile
