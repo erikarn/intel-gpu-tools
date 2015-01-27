@@ -26,6 +26,11 @@
  *
  */
 
+#ifdef	__FreeBSD__
+#define _WITH_GETLINE
+#include <stdio.h>
+#endif	/* __FreeBSD__ */
+
 #include <limits.h>
 #include <sys/types.h>
 #include <sys/stat.h>
