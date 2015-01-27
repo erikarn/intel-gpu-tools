@@ -73,9 +73,27 @@ intel_get_total_ram_mb(void)
 uint64_t
 intel_get_avail_ram_mb(void)
 {
+	uint64_t avail_pages;
+	int pagesize, pageshift;
+	size_t len;
 
-	/* For now, return 0 - fix it later */
-	return 0;
+	/* get the page size and calculate pageshift from it */
+	pagesize = getpagesize();
+	pageshift = 0;
+	while (pagesize > 1) {
+		pageshift++;
+		pagesize >>= 1;
+	}
+
+	/* For now, return free */
+	/* Later we should add inactive, cache */
+	len = sizeof(avail_pages);
+	if (sysctlbyname("vm.stats.vm.v_free_count", &avail_pages,
+	    &len, NULL, 0) < 0) {
+		err(1, "Can't fetch vm.stats.vm.v_free_count");
+	}
+
+	return ((avail_pages << pageshift) / (1024 * 1024));
 }
 
 /**
@@ -88,6 +106,7 @@ uint64_t
 intel_get_total_swap_mb(void)
 {
 
+	fprintf(stderr, "%s: called; unimplemented\n", __func__);
 	/* For now, return 0 - fix it later */
 	return 0;
 }
@@ -151,7 +170,7 @@ intel_purge_vm_caches(void)
 {
 
 	/* Not yet implemented */
-	fprintf("%s: not implemented\n", __func__);
+	fprintf(stderr, "%s: not implemented\n", __func__);
 }
 
 
