@@ -36,7 +36,9 @@
 #include <inttypes.h>
 #include <errno.h>
 #include <unistd.h>
+#ifndef	__FreeBSD__
 #include <malloc.h>
+#endif
 #include <limits.h>
 #include <sys/ioctl.h>
 #include <sys/stat.h>
