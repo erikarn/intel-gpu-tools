@@ -28,6 +28,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <err.h>
 #include "intel_io.h"
 #include "intel_chipset.h"
