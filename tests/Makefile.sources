@@ -78,12 +78,16 @@ TESTS_progs_M = \
 	kms_setmode \
 	kms_universal_plane \
 	pm_lpsp \
-	pm_rpm \
 	pm_rps \
 	pm_rc6_residency \
 	prime_self_import \
 	template \
 	$(NULL)
+
+if IS_FREEBSD
+else
+TESTS_progs_M += pm_rpm
+endif
 
 TESTS_progs = \
 	core_getclient \
