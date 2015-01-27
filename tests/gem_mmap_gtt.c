@@ -74,6 +74,12 @@ create_pointer(int fd)
 	return ptr;
 }
 
+#ifdef	__FreeBSD__
+#define	X_MMAP	mmap
+#else
+#define	X_MMAP mmap64
+#endif
+
 static void
 test_access(int fd)
 {
@@ -92,11 +98,11 @@ test_access(int fd)
 			    DRM_IOCTL_I915_GEM_MMAP_GTT,
 			    &mmap_arg) == 0);
 
-	igt_assert(mmap64(0, OBJECT_SIZE, PROT_READ | PROT_WRITE,
+	igt_assert(X_MMAP(0, OBJECT_SIZE, PROT_READ | PROT_WRITE,
 			  MAP_SHARED, fd, mmap_arg.offset));
 
 	/* Check that the same offset on the other fd doesn't work. */
-	igt_assert(mmap64(0, OBJECT_SIZE, PROT_READ | PROT_WRITE,
+	igt_assert(X_MMAP(0, OBJECT_SIZE, PROT_READ | PROT_WRITE,
 			  MAP_SHARED, fd2, mmap_arg.offset) == MAP_FAILED);
 	igt_assert(errno == EACCES);
 
@@ -107,7 +113,7 @@ test_access(int fd)
 
 	/* Recheck that it works after flink. */
 	/* Check that the same offset on the other fd doesn't work. */
-	igt_assert(mmap64(0, OBJECT_SIZE, PROT_READ | PROT_WRITE,
+	igt_assert(X_MMAP(0, OBJECT_SIZE, PROT_READ | PROT_WRITE,
 			  MAP_SHARED, fd2, mmap_arg.offset));
 }
 
@@ -126,11 +132,11 @@ test_short(int fd)
 	for (pages = 1; pages <= OBJECT_SIZE / 4096; pages <<= 1) {
 		uint8_t *r, *w;
 
-		w = mmap64(0, pages * 4096, PROT_READ | PROT_WRITE,
+		w = X_MMAP(0, pages * 4096, PROT_READ | PROT_WRITE,
 			   MAP_SHARED, fd, mmap_arg.offset);
 		igt_assert(w != MAP_FAILED);
 
-		r = mmap64(0, pages * 4096, PROT_READ,
+		r = X_MMAP(0, pages * 4096, PROT_READ,
 			   MAP_SHARED, fd, mmap_arg.offset);
 		igt_assert(r != MAP_FAILED);
 
@@ -144,6 +150,8 @@ test_short(int fd)
 	}
 	gem_close(fd, mmap_arg.handle);
 }
+
+#undef	X_MMAP
 
 static void
 test_copy(int fd)
