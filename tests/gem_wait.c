@@ -195,6 +195,10 @@ static void render_timeout(int fd)
 
 	intel_batchbuffer_flush(batch);
 
+#ifdef	__FreeBSD__
+#define	ETIME		ETIMEDOUT
+#endif	/* FreeBSD */
+
 	ret = gem_bo_wait_timeout(fd, dst2->handle, &timeout);
 	igt_assert_eq(ret, -ETIME);
 	igt_assert_eq(timeout, 0);
@@ -205,6 +209,9 @@ static void render_timeout(int fd)
 	igt_assert_eq(gem_bo_wait_timeout(fd, dst2->handle, &timeout), -ETIME);
 	igt_assert_eq(timeout, 0);
 
+#ifdef	__FreeBSD__
+#undef	ETIME
+#endif	/* FreeBSD */
 
 	if (do_signals)
 		igt_stop_signal_helper();
